@@ -6,7 +6,7 @@ def scores_file_name():
         input_game.my_file.write(game)
         if input_game != int
             print = "error please put numbers only"
-            return game
+            return gam
         else:
             game = list
             print "\n" * 100
