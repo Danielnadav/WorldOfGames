@@ -47,7 +47,7 @@ def mil():
 # elif get_guess_if get_guess_from_user() == mil():
 #     print("Ture")
 # if get_guess_from_user() != mil():
-#     print("Lost")
+#     print("Lost")     
 # elif get_guess_from_user == mil():
 #     print("WIN!!!")
 #
