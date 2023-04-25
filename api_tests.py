@@ -50,8 +50,8 @@ import json
 import requests
 
 
-    url = "https://api.exchangerate-api.com/v4/latest/USD"
-    response = requests.get(url).json()
-    json_data = json.loads(response.text)
-    result = json_data['data']['BRL']
-    print (result)
+url = "https://api.exchangerate-api.com/v4/latest/USD"
+response = requests.get(url).json()
+json_data = json.loads(response.text)
+result = json_data['data']['BRL']
+print (result)
