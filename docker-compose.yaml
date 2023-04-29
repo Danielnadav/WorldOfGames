@@ -7,7 +7,7 @@ networks:
 services:
   jenkins_server:
     build:
-      context: ""
+      context: .
     networks:
       - jenkins
     container_name: JenkinsServer
@@ -27,7 +27,7 @@ services:
   jenkins_docker:
     image: docker:dind
     networks:
-      jenkins:y740O6tmJ6
+      jenkins:
         aliases:
           - docker
     container_name: JenkinsDocker
@@ -35,7 +35,7 @@ services:
     environment:
       - DOCKER_TLS_CERTDIR=/certs
     ports:
-      - "2377:2377"
+      - "2376:2376"
     volumes:
       - ./jenkins-docker-certs:/certs/client
       - ./jenkins-data:/var/jenkins_home
