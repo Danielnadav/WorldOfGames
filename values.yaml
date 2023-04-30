@@ -1,0 +1,20 @@
+additionalAgents:
+  dind:
+    podName: dind-agent
+    customJenkinsLabels: dind-agent
+    image: dind-client-jenkins-agent
+    tag: latest
+    envVars:
+     - name: DOCKER_HOST
+       value: "tcp://localhost:2375"
+    alwaysPullImage: true
+    yamlTemplate:  |-
+     spec:
+         containers:
+           - name: dind-daemon
+             image: jpetazzo/dind
+             securityContext:
+               privileged: true
+             env:
+               - name: DOCKER_TLS_VERIFY
+                 value: ""

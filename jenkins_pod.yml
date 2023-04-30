@@ -3,7 +3,7 @@ kind: Pod
 spec:
 containers:  # list of containers that you want present for your build, you can define a default container in the Jenkinsfile
   - name: docker
-    image: docker:18.06.1
+    image: python:3.11.3
     command: ["tail", "-f", "/dev/null"]
     imagePullPolicy: Always
     volumeMounts:
