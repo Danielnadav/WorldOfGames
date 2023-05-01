@@ -1,20 +1,151 @@
-additionalAgents:
-  dind:
-    podName: dind-agent
-    customJenkinsLabels: dind-agent
-    image: dind-client-jenkins-agent
-    tag: latest
-    envVars:
-     - name: DOCKER_HOST
-       value: "tcp://localhost:2375"
-    alwaysPullImage: true
-    yamlTemplate:  |-
-     spec:
-         containers:
-           - name: dind-daemon
-             image: jpetazzo/dind
-             securityContext:
-               privileged: true
-             env:
-               - name: DOCKER_TLS_VERIFY
-                 value: ""
+##additionalAgents:
+##  dind:
+##    podName: dind-agent
+##    customJenkinsLabels: dind-agent
+##    image: dind-client-jenkins-agent
+##    tag: latest
+##    envVars:
+##     - name: DOCKER_HOST
+##       value: "tcp://localhost:2375"
+##    alwaysPullImage: true
+##    yamlTemplate:  |-
+##     spec:
+##         containers:
+##           - name: dind-daemon
+##             image: jpetazzo/dind
+##             securityContext:
+##               privileged: true
+##             env:
+##               - name: DOCKER_TLS_VERIFY
+##                 value: ""
+#
+## Jenkins configuration
+#jenkins:
+#  # Docker image to use for Jenkins
+#  image: jenkins/jenkins:lts
+#  # Docker image pull policy
+#  imagePullPolicy: IfNotPresent
+#  # Enable Docker in Docker
+#  privileged: true
+#  # Set the agent to run as Kubernetes pod
+#  agent:
+#    kubernetes:
+#      # Use the Docker in Docker image as agent
+#      yamlTemplate: |
+#        apiVersion: v1
+#        kind: Pod
+#        metadata:
+#          labels:
+#            jenkins: "slave"
+#            k8s-app: "jenkins"
+#        spec:
+#          containers:
+#          - name: jnlp
+#            image: jenkins/jnlp-slave
+#            volumeMounts:
+#            - name: docker-sock
+#              mountPath: /var/run/docker.sock
+#          - name: docker
+#            image: docker:20.10-dind
+#            securityContext:
+#              privileged: true
+#            volumeMounts:
+#            - name: docker-sock
+#              mountPath: /var/run/docker.sock
+#            - name: jenkins-home
+#              mountPath: /var/jenkins_home
+#            command:
+#            - /bin/sh
+#            - -c
+#            - |
+#              set -x
+#              docker version
+#          volumes:
+#          - name: docker-sock
+#            hostPath:
+#              path: /var/run/docker.sock
+#          - name: jenkins-home
+#            emptyDir: {}
+#      # Configure the agent container with Python
+#      containers:
+#        python:
+#          image: python:3.9-alpine
+#          command:
+#            - cat
+#          tty: true
+#          stdin: true
+
+# Jenkins configuration
+jenkins:
+  # Docker image to use for Jenkins
+  image: jenkins/jenkins:lts
+  # Docker image pull policy
+  imagePullPolicy: IfNotPresent
+  # Enable Docker in Docker
+  privileged: true
+  # Set the agent to run as Kubernetes pod
+  agent:
+    kubernetes:
+      # Use the Docker in Docker image as agent
+      yamlTemplate: |
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          labels:
+            jenkins: "slave"
+            k8s-app: "jenkins"
+        spec:
+          containers:
+          - name: jnlp
+            image: jenkins/jnlp-slave
+            volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+          - name: docker
+            image: docker:20.10-dind
+            securityContext:
+              privileged: true
+            volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
+            command:
+            - /bin/sh
+            - -c
+            - |
+              set -x
+              docker version
+          volumes:
+          - name: docker-sock
+            hostPath:
+              path: /var/run/docker.sock
+          - name: jenkins-home
+            emptyDir: {}
+      # Configure the agent container with Python
+#      containers:
+#        python:
+#          image: python:3.9-alpine
+#          command:
+#            - cat
+#          tty: true
+#          stdin: true
+
+# Jenkins configuration
+jenkins:
+  # Docker image to use for Jenkins
+  image: jenkins/jenkins:lts
+  # Docker image pull policy
+  imagePullPolicy: IfNotPresent
+  # Enable Docker in Docker
+  privileged: true
+  # Set the agent to run as Docker container
+  agent:
+    docker:
+      # Use the Docker in Docker image as agent
+      image: docker:20.10-dind
+      # Set Docker socket location
+      args: --group-add=$(stat -c '%g' /var/run/docker.sock) -v /var/run/docker.sock:/var/run/docker.sock
+      # Add a Python 3 image as an agent
+      extras: |
+        RUN apt-get update && apt-get install -y python3 python3-pip && pip3 install --upgrade pip
