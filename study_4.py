@@ -17,8 +17,13 @@ def days_of_units(num_of_days):
 
 
 user_input = input("Hey this is input exemple, pls put number\n")
-user_input_var = int(user_input)
-calc_units = days_of_units(user_input_var)
-print(calc_units)
-#
-# # print(isinstance(calc_units, bool))
+
+if user_input.isdigit():
+    user_input_var = int(user_input)
+# # #user input return the value we enter beofoe
+    calc_units = days_of_units(user_input)
+    print(calc_units)
+else:
+    print("pls  and put number")
+
+# print(isinstance(calc_units, bool))

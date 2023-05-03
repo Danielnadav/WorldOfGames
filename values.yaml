@@ -123,29 +123,10 @@ jenkins:
           - name: jenkins-home
             emptyDir: {}
       # Configure the agent container with Python
-#      containers:
-#        python:
-#          image: python:3.9-alpine
-#          command:
-#            - cat
-#          tty: true
-#          stdin: true
-
-# Jenkins configuration
-jenkins:
-  # Docker image to use for Jenkins
-  image: jenkins/jenkins:lts
-  # Docker image pull policy
-  imagePullPolicy: IfNotPresent
-  # Enable Docker in Docker
-  privileged: true
-  # Set the agent to run as Docker container
-  agent:
-    docker:
-      # Use the Docker in Docker image as agent
-      image: docker:20.10-dind
-      # Set Docker socket location
-      args: --group-add=$(stat -c '%g' /var/run/docker.sock) -v /var/run/docker.sock:/var/run/docker.sock
-      # Add a Python 3 image as an agent
-      extras: |
-        RUN apt-get update && apt-get install -y python3 python3-pip && pip3 install --upgrade pip
+      containers:
+        python:
+          image: python:3.9-alpine
+          command:
+            - cat
+          tty: true
+          stdin: true
