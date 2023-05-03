@@ -21,4 +21,4 @@ user_input_var = int(user_input)
 calc_units = days_of_units(user_input_var)
 print(calc_units)
 #
-# # print(isinstance(calc_units, bool))
+print(isinstance(calc_units, bool))
